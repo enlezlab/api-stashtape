@@ -1,0 +1,65 @@
+openapi: "3.0.0"
+
+info:
+  title: "Stash Tape API"
+  description: "API for Stash Tape"
+  version: "1.0.0"
+
+servers:
+  - url: "api.stashtape.com"
+    description: "API Production Server"
+  - url: "apistaging.stashtape.com"
+    description: "API Staging Server"
+
+paths:
+  /collection:
+    get:
+      summary: "Retrive a list of collection items"
+      description: "Return an array of collection identifier"
+      responses:
+        "200":
+          description: "Call Success"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    description: "A general error message"
+
+  /collection/{id}:
+    get:
+      summary: "Get details of a specific collection item"
+      description: "Returns details of a collection item based on its ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Call Success"
+          content:
+            application/json:
+              schema:
+                type: "object"
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    description: "A general error message"
