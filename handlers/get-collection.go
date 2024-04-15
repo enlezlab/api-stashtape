@@ -71,8 +71,3 @@ func GetCollection() string {
 
 	return string(res)
 }
-
-func GetCollectionItemById(id string) {
-	fmt.Println(id)
-	fmt.Println("TODO: implement get collection by id")
-}

@@ -11,7 +11,7 @@ import (
 	"stashtape/types"
 )
 
-func AddItem(data types.CollectionItem) {
+func AddCollectionItem(data types.CollectionItem) {
 
 	awsCreds := os.Getenv("AWS_CREDS")
 	awsCredsSecret := os.Getenv("AWS_CREDS_SECRET")

@@ -3,25 +3,26 @@ package main
 import (
 	"fmt"
 	"stashtape/handlers"
-	"stashtape/types"
+	// "stashtape/types"
 )
 
 func main() {
-	getCollectionById := handler.GetCollectionItemById
-	getCollectionById("123")
 
 	getCollection := handler.GetCollection
 	list := getCollection()
 	fmt.Println(list)
 
-	addItem := handler.AddItem
+	getCollectionItem := handler.GetCollectionItem
+	getCollectionItem()
 
-	data := types.CollectionItem{
-		CollectionId: "ST006",
-		Timestamp:    "0000000000",
-	}
+	// addCollectionItem := handler.AddCollectionItem
 
-	addItem(data)
+	// data := types.CollectionItem{
+	// 	CollectionId: "ST007",
+	// 	Timestamp:    "0000000000",
+	// }
+
+	// addCollectionItem(data)
 
 	fmt.Println("run api server")
 }
