@@ -24,7 +24,7 @@ func GetCollectionItem() {
 	})
 
 	if err != nil {
-		fmt.Println("Error creating sessoin: ", err)
+		fmt.Println("Error creating session: ", err)
 	}
 
 	service := dynamodb.New(session)
