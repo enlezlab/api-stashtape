@@ -8,9 +8,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"os"
+	"stashtape/types"
 )
 
-func GetItem(tableName string, valCond string) string {
+func GetItem(tableName string, valCond string) []byte {
 
 	awsCreds := os.Getenv("AWS_CREDS")
 	awsCredsSecret := os.Getenv("AWS_CREDS_SECRET")
@@ -54,28 +55,22 @@ func GetItem(tableName string, valCond string) string {
 		fmt.Println("Query Error: ", err)
 	}
 
-	type ResponseItem struct {
-		Id   string `json: "id"`
-		Hash string `json: "hash"`
-	}
-
-	var res []ResponseItem
+	var resStruct []types.CollectionItem
 
 	for _, item := range result.Items {
 
-		item := ResponseItem{
-			Id:   *item["CollectionId"].S,
-			Hash: *item["CollectionHash"].S,
+		item := types.CollectionItem{
+			CollectionId: *item["CollectionId"].S,
+			Timestamp:    *item["Timestamp"].S,
 		}
 
-		res = append(res, item)
+		resStruct = append(resStruct, item)
 	}
 
-	resJSON, err := json.Marshal(res)
+	res, err := json.Marshal(resStruct)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	return string(resJSON)
-
+	return res
 }

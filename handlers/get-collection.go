@@ -11,7 +11,7 @@ import (
 	"stashtape/types"
 )
 
-func GetCollection(tableName string) string {
+func GetCollection(tableName string) []byte {
 
 	awsCreds := os.Getenv("AWS_CREDS")
 	awsCredsSecret := os.Getenv("AWS_CREDS_SECRET")
@@ -70,5 +70,5 @@ func GetCollection(tableName string) string {
 		fmt.Println(err)
 	}
 
-	return string(res)
+	return res
 }

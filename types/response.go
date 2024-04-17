@@ -1,6 +1,6 @@
 package types
 
 type Response struct {
-	Status  string `json: "code"`
+	Status  string `json: "status"`
 	Message string `json: "message"`
 }
