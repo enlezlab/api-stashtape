@@ -11,7 +11,7 @@ import (
 	"stashtape/types"
 )
 
-func GetCollection() string {
+func GetCollection(tableName string) string {
 
 	awsCreds := os.Getenv("AWS_CREDS")
 	awsCredsSecret := os.Getenv("AWS_CREDS_SECRET")
@@ -30,9 +30,10 @@ func GetCollection() string {
 	}
 
 	service := dynamodb.New(session)
+	tn := tableName
 
 	input := &dynamodb.ScanInput{
-		TableName: aws.String("collection"),
+		TableName: aws.String(tn),
 	}
 
 	var allItems []map[string]*dynamodb.AttributeValue

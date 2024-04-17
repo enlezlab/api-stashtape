@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -11,7 +12,7 @@ import (
 	"stashtape/types"
 )
 
-func AddCollectionItem(data types.CollectionItem) {
+func AddItem(table string, data types.CollectionItem) string {
 
 	awsCreds := os.Getenv("AWS_CREDS")
 	awsCredsSecret := os.Getenv("AWS_CREDS_SECRET")
@@ -27,17 +28,28 @@ func AddCollectionItem(data types.CollectionItem) {
 
 	if err != nil {
 		fmt.Println("Error creating session:", err)
-		return
 	}
 
 	service := dynamodb.New(session)
+	tableName := aws.String(table)
 	item := data
 
-	tableName := aws.String("collection")
 	collectionItem, err := dynamodbattribute.MarshalMap(item)
 	if err != nil {
 		fmt.Println("Error marshalling data:", err)
-		return
+
+		responseFailed := types.Response{
+			Status:  "failed",
+			Message: "Failed marshalling data.",
+		}
+
+		responseJSON, err := json.Marshal(responseFailed)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		return string(responseJSON)
 	}
 
 	input := &dynamodb.PutItemInput{
@@ -48,9 +60,29 @@ func AddCollectionItem(data types.CollectionItem) {
 	_, err = service.PutItem(input)
 	if err != nil {
 		fmt.Println("Error adding item:", err)
-		return
+
+		responseFailed := types.Response{
+			Status:  "failed",
+			Message: "Failed to item.",
+		}
+
+		responseJSON, err := json.Marshal(responseFailed)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		return string(responseJSON)
 	}
 
-	fmt.Println("Item added successfully!")
+	responseOK := types.Response{
+		Status:  "ok",
+		Message: "Collection item successfully added.",
+	}
 
+	responseJSON, err := json.Marshal(responseOK)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return string(responseJSON)
 }

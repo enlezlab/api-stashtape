@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -9,7 +10,7 @@ import (
 	"os"
 )
 
-func GetCollectionItem() {
+func GetItem(tableName string, valCond string) string {
 
 	awsCreds := os.Getenv("AWS_CREDS")
 	awsCredsSecret := os.Getenv("AWS_CREDS_SECRET")
@@ -29,8 +30,8 @@ func GetCollectionItem() {
 
 	service := dynamodb.New(session)
 
-	tableName := aws.String("collection")
-	collectionId := aws.String("ST007")
+	tn := aws.String(tableName)
+	vc := aws.String(valCond)
 
 	keyCondExp := "#CollectionId = :collectionId"
 	expAttrName := map[string]*string{
@@ -38,11 +39,11 @@ func GetCollectionItem() {
 	}
 
 	expAttrVal := map[string]*dynamodb.AttributeValue{
-		":collectionId": {S: collectionId},
+		":collectionId": {S: vc},
 	}
 
 	input := &dynamodb.QueryInput{
-		TableName:                 tableName,
+		TableName:                 tn,
 		KeyConditionExpression:    aws.String(keyCondExp),
 		ExpressionAttributeNames:  expAttrName,
 		ExpressionAttributeValues: expAttrVal,
@@ -51,13 +52,30 @@ func GetCollectionItem() {
 	result, err := service.Query(input)
 	if err != nil {
 		fmt.Println("Query Error: ", err)
-		return
 	}
 
-	for _, item := range result.Items {
-		fmt.Println("===Query Result===")
-		fmt.Println(item)
-		fmt.Println("===End of Query Result===")
+	type ResponseItem struct {
+		Id   string `json: "id"`
+		Hash string `json: "hash"`
 	}
+
+	var res []ResponseItem
+
+	for _, item := range result.Items {
+
+		item := ResponseItem{
+			Id:   *item["CollectionId"].S,
+			Hash: *item["CollectionHash"].S,
+		}
+
+		res = append(res, item)
+	}
+
+	resJSON, err := json.Marshal(res)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return string(resJSON)
 
 }
