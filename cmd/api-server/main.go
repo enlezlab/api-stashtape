@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-chi/chi"
 	"net/http"
-	"stashtape/handlers"
+	handler "stashtape/handlers"
+
+	"github.com/go-chi/chi"
 	// "stashtape/types"
 	// "encoding/json"
 )
