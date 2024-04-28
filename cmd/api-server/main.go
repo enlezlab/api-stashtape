@@ -57,8 +57,8 @@ func main() {
 	// addItem := handler.AddItem
 
 	// data := types.CollectionItem{
-	// 	CollectionId: "ST012",
-	// 	Timestamp:    "7777777777",
+	// 	CollectionId: "ST015",
+	// 	Timestamp:    "6666666666",
 	// }
 
 	// res := addItem("collection", data)

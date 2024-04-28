@@ -1,6 +1,6 @@
 package types
 
 type CollectionItem struct {
-	CollectionId string `json:"collection_id"`
-	Timestamp    string `json:"timestamp"`
+	CollectionId string
+	Timestamp    string
 }

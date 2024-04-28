@@ -3,32 +3,17 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"stashtape/db"
+	"stashtape/types"
+
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"os"
-	"stashtape/types"
 )
 
 func AddItem(table string, data types.CollectionItem) string {
 
-	awsCreds := os.Getenv("AWS_CREDS")
-	awsCredsSecret := os.Getenv("AWS_CREDS_SECRET")
-
-	session, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-2"),
-		Credentials: credentials.NewStaticCredentials(
-			awsCreds,
-			awsCredsSecret,
-			"",
-		),
-	})
-
-	if err != nil {
-		fmt.Println("Error creating session:", err)
-	}
+	session := db.SessionAWS()
 
 	service := dynamodb.New(session)
 	tableName := aws.String(table)
