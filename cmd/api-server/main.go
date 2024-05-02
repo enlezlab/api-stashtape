@@ -34,6 +34,13 @@ func main() {
 	fmt.Println("Server listening on port 8080")
 	http.ListenAndServe(":8080", router)
 
+	// fmt.Println("===delete item===")
+
+	// deleteItem := handler.DeleteItem
+	// deleteItem("collection", "ST001")
+
+	// fmt.Println("===end of delete item===")
+
 	// fmt.Println("===get all collection from table example===")
 	// getCollection := handler.GetCollection
 	// list := getCollection("collection")
