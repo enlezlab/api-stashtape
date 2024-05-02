@@ -10,6 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
+// TODO:
+// Refactor the dynamodb call to store package
 func GetCollection(tableName string) []byte {
 
 	session := db.SessionAWS()

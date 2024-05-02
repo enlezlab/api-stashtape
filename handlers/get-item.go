@@ -3,56 +3,14 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"stashtape/db"
-	"stashtape/types"
-
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"stashtape/store"
 )
 
 func GetItem(tableName string, valCond string) []byte {
 
-	session := db.SessionAWS()
+	item := store.GetItem(tableName, valCond)
 
-	service := dynamodb.New(session)
-
-	tn := aws.String(tableName)
-	vc := aws.String(valCond)
-
-	keyCondExp := "#CollectionId = :collectionId"
-	expAttrName := map[string]*string{
-		"#CollectionId": aws.String("CollectionId"),
-	}
-
-	expAttrVal := map[string]*dynamodb.AttributeValue{
-		":collectionId": {S: vc},
-	}
-
-	input := &dynamodb.QueryInput{
-		TableName:                 tn,
-		KeyConditionExpression:    aws.String(keyCondExp),
-		ExpressionAttributeNames:  expAttrName,
-		ExpressionAttributeValues: expAttrVal,
-	}
-
-	result, err := service.Query(input)
-	if err != nil {
-		fmt.Println("Query Error: ", err)
-	}
-
-	var resStruct []types.CollectionItem
-
-	for _, item := range result.Items {
-
-		item := types.CollectionItem{
-			CollectionId: *item["CollectionId"].S,
-			Timestamp:    *item["Timestamp"].S,
-		}
-
-		resStruct = append(resStruct, item)
-	}
-
-	res, err := json.Marshal(resStruct)
+	res, err := json.Marshal(item)
 	if err != nil {
 		fmt.Println(err)
 	}

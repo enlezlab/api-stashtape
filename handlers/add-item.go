@@ -11,6 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
+// TODO:
+// Refactor the dynamodb call to store package
 func AddItem(table string, data types.CollectionItem) string {
 
 	session := db.SessionAWS()

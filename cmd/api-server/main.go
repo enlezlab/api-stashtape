@@ -37,7 +37,7 @@ func main() {
 	// fmt.Println("===delete item===")
 
 	// deleteItem := handler.DeleteItem
-	// deleteItem("collection", "ST001")
+	// deleteItem("collection", "ST002")
 
 	// fmt.Println("===end of delete item===")
 
