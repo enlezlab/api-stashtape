@@ -43,9 +43,22 @@ func GetItem(tableName string, valCond string) []types.CollectionItem {
 
 	for _, item := range result.Items {
 
+		list := []types.CollectionItemList{}
+
+		for _, colItem := range item["Entries"].L {
+
+			collectionItemList := types.CollectionItemList{
+				Title:       *colItem.M["Title"].S,
+				Description: *colItem.M["Description"].S,
+			}
+
+			list = append(list, collectionItemList)
+		}
+
 		item := types.CollectionItem{
 			CollectionId: *item["CollectionId"].S,
 			Timestamp:    *item["Timestamp"].S,
+			List:         list,
 		}
 
 		resStruct = append(resStruct, item)
