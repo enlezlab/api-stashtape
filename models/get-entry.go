@@ -1,4 +1,4 @@
-package store
+package model
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
-func GetItem(tableName string, valCond string) []types.CollectionItem {
+func GetEntry(tableName string, valCond string) []types.User {
 
 	session := db.SessionAWS()
 
@@ -18,13 +18,13 @@ func GetItem(tableName string, valCond string) []types.CollectionItem {
 	tn := aws.String(tableName)
 	vc := aws.String(valCond)
 
-	keyCondExp := "#CollectionId = :collectionId"
+	keyCondExp := "#USER_ID = :userId"
 	expAttrName := map[string]*string{
-		"#CollectionId": aws.String("CollectionId"),
+		"#USER_ID": aws.String("USER_ID"),
 	}
 
 	expAttrVal := map[string]*dynamodb.AttributeValue{
-		":collectionId": {
+		":userId": {
 			S: vc,
 		},
 	}
@@ -41,30 +41,29 @@ func GetItem(tableName string, valCond string) []types.CollectionItem {
 		fmt.Println("Query Error: ", err)
 	}
 
-	var resStruct []types.CollectionItem
+	var resStruct []types.User
 
 	for _, item := range result.Items {
 
-		list := []types.CollectionItemList{}
+		entries := []types.Entries{}
 
-		for _, colItem := range item["Entries"].L {
-			fmt.Println(colItem)
+		for _, colItem := range item["ENTRIES"].L {
 
-			collectionItemList := types.CollectionItemList{
+			entryItem := types.Entries{
+				UID:         *colItem.M["UID"].S,
 				Title:       *colItem.M["Title"].S,
 				Description: *colItem.M["Description"].S,
 			}
 
-			list = append(list, collectionItemList)
+			entries = append(entries, entryItem)
 		}
 
-		item := types.CollectionItem{
-			CollectionId: *item["CollectionId"].S,
-			Timestamp:    *item["Timestamp"].S,
-			List:         list,
+		resItem := types.User{
+			USER_ID: *item["USER_ID"].S,
+			ENTRIES: entries,
 		}
 
-		resStruct = append(resStruct, item)
+		resStruct = append(resStruct, resItem)
 	}
 
 	return resStruct

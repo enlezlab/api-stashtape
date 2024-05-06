@@ -1,4 +1,4 @@
-package handler
+package model
 
 import (
 	"encoding/json"
@@ -11,8 +11,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-// TODO:
-// Refactor the dynamodb call to store package
 func NewEntry(table string, data types.User) string {
 
 	session := db.SessionAWS()

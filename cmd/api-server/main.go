@@ -3,37 +3,19 @@ package main
 import (
 	"fmt"
 	"net/http"
-	handler "stashtape/handlers"
-	"stashtape/types"
+	handlerfunc "stashtape/handler-func"
 
 	"github.com/go-chi/chi"
 	// "stashtape/types"
 	// "encoding/json"
 )
 
-func handlerCollectionItem(w http.ResponseWriter, r *http.Request) {
-
-	id := chi.URLParam(r, "collectionId")
-
-	getItem := handler.GetItem
-	item := getItem("collection", id)
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(item)
-}
-
-func handlerCollection(w http.ResponseWriter, r *http.Request) {
-	getCollection := handler.GetCollection
-	list := getCollection("collection")
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(list)
-}
-
 func main() {
-	// router := chi.NewRouter()
-	// router.HandleFunc("/collection/{collectionId}", handlerCollectionItem)
-	// router.HandleFunc("/collection", handlerCollection)
-	// fmt.Println("Server listening on port 8080")
-	// http.ListenAndServe(":8080", router)
+	router := chi.NewRouter()
+	router.HandleFunc("/{userId}", handlerfunc.HandlerUserContent)
+	router.HandleFunc("/content/{userId}", handlerfunc.HandlerUserUpdateContent)
+	fmt.Println("Server listening on port 8080")
+	http.ListenAndServe(":8080", router)
 
 	// fmt.Println("===delete item===")
 
@@ -59,51 +41,61 @@ func main() {
 
 	// fmt.Println("===end of get item from table example===")
 
+	// fmt.Println("===get entry from table example===")
+
+	// getEntry := model.GetEntry
+	// item := getEntry("USER", "user_id_here")
+	// fmt.Println(item)
+
+	// fmt.Println("===end of get entry from table example===")
+
 	// fmt.Println("")
 
 	// fmt.Println("===add Item to table example===")
-	// newEntry := handler.NewEntry
+
+	// entry := []types.Entries{}
+
+	// item := types.Entries{
+	// 	UID:         "new entry_hash_here",
+	// 	Title:       "new Entry title here",
+	// 	Description: "new Entry description here",
+	// }
+
+	// entry = append(entry, item)
+
+	// userId := util.UserIdGen()
+
+	// data := types.User{
+	// 	USER_ID: userId,
+	// 	ENTRIES: entry,
+	// }
+
+	// newEntry := model.NewEntry
+	// res := newEntry("USER_CONTENT", data)
+	// fmt.Println(res)
+	// fmt.Println("===end of add item to table example===")
+
+	// fmt.Println("===update user entry to table example===")
+	// updateEntry := model.UpdateEntry
 
 	// var colList []types.Entries
 
 	// item := types.Entries{
-	// 	UID:         "entry_hash_here",
-	// 	Title:       "Entry title here",
-	// 	Description: "Entry description here",
+	// 	UID:         "uid here",
+	// 	Title:       "entry title here",
+	// 	Description: "entry description here",
 	// }
 
 	// colList = append(colList, item)
 
 	// data := types.User{
-	// 	USER_ID: "user_id_here",
+	// 	USER_ID: "f7652dad-8b6c-47d4-b185-c6db76782812",
 	// 	ENTRIES: colList,
 	// }
 
-	// res := newEntry("USER", data)
+	// res := updateEntry("USER_CONTENT", data)
 	// fmt.Println(res)
-	// fmt.Println("===end of add item to table example===")
-
-	fmt.Println("===update user entry to table example===")
-	updateEntry := handler.UpdateEntry
-
-	var colList []types.Entries
-
-	item := types.Entries{
-		UID:         "uid here",
-		Title:       "entry title here",
-		Description: "entry description here",
-	}
-
-	colList = append(colList, item)
-
-	data := types.User{
-		USER_ID: "user_id_here",
-		ENTRIES: colList,
-	}
-
-	res := updateEntry("USER", data)
-	fmt.Println(res)
-	fmt.Println("===end of update user entry to table example===")
+	// fmt.Println("===end of update user entry to table example===")
 
 	// fmt.Println("===update Item to table example===")
 	// updateItem := handler.UpdateItem
